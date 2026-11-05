@@ -1,0 +1,82 @@
+[
+  {
+    "id": "se_001",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "junior",
+    "question": "Explain the difference between stack and heap memory.",
+    "model_answer": "Stack memory is used for static memory allocation and stores local variables and function call frames. It follows LIFO (Last In First Out) order and is managed automatically. Heap memory is used for dynamic memory allocation, managed manually (or by garbage collector), and is larger but slower to access. Stack is faster due to sequential memory access patterns.",
+    "tips": "Mention real-world implications like stack overflow, memory leaks. Draw a diagram if on whiteboard.",
+    "keywords": ["stack", "heap", "memory", "allocation", "LIFO"]
+  },
+  {
+    "id": "se_002",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "junior",
+    "question": "What is the difference between REST and GraphQL?",
+    "model_answer": "REST uses fixed endpoints for each resource, returns entire data objects, and uses HTTP methods (GET, POST, PUT, DELETE). GraphQL uses a single endpoint, allows clients to specify exactly what data they need, reducing over-fetching and under-fetching. GraphQL is better for complex, nested data requirements while REST is simpler for straightforward CRUD operations.",
+    "tips": "Give a concrete example of over-fetching in REST vs. a targeted GraphQL query.",
+    "keywords": ["REST", "GraphQL", "API", "endpoint", "over-fetching"]
+  },
+  {
+    "id": "se_003",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "mid",
+    "question": "Describe the SOLID principles with examples.",
+    "model_answer": "SOLID: S-Single Responsibility (a class should have one reason to change), O-Open/Closed (open for extension, closed for modification), L-Liskov Substitution (subtypes must be substitutable for base types), I-Interface Segregation (clients shouldn't depend on interfaces they don't use), D-Dependency Inversion (depend on abstractions not concretions). Example: A User class should not handle email sending (violates SRP); create a separate EmailService.",
+    "tips": "Use code examples. Show how violating each principle leads to maintenance problems.",
+    "keywords": ["SOLID", "design principles", "OOP", "single responsibility", "dependency inversion"]
+  },
+  {
+    "id": "se_004",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "senior",
+    "question": "How would you design a distributed rate limiter?",
+    "model_answer": "Use a token bucket or sliding window algorithm. Store rate limit counters in Redis with atomic operations (INCR + EXPIRE). For distributed systems, use Redis Cluster or a dedicated rate limiting service. Consider edge cases: clock skew between nodes, burst handling, and rate limit headers in responses. Tools like Nginx, Kong, or AWS API Gateway provide built-in solutions.",
+    "tips": "Mention consistency trade-offs, Redis vs in-memory, and how to handle failures gracefully.",
+    "keywords": ["rate limiter", "distributed systems", "Redis", "token bucket", "sliding window"]
+  },
+  {
+    "id": "se_005",
+    "role": "Software Engineer",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Tell me about a time you had to debug a complex production issue.",
+    "model_answer": "Use the STAR method: Situation (production API was returning 500 errors for 10% of requests), Task (identify root cause with minimal downtime), Action (added structured logging, used distributed tracing with Jaeger, identified N+1 query in user service under load), Result (fixed query, added caching, reduced p99 latency by 60%). Always mention monitoring tools used.",
+    "tips": "Quantify the impact and your solution. Show systematic debugging approach.",
+    "keywords": ["debugging", "production", "logging", "monitoring", "STAR method"]
+  },
+  {
+    "id": "se_006",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "mid",
+    "question": "Explain CAP theorem and its practical implications.",
+    "model_answer": "CAP theorem states a distributed system can guarantee at most two of: Consistency (all nodes see same data), Availability (every request gets a response), Partition Tolerance (system works despite network splits). In practice, partition tolerance is required, so you choose between CP (consistent, may reject requests during partitions - e.g., HBase, Zookeeper) or AP (available, may return stale data - e.g., Cassandra, CouchDB).",
+    "tips": "Give database examples for each trade-off. Explain PACELC as a more nuanced model.",
+    "keywords": ["CAP theorem", "consistency", "availability", "partition tolerance", "distributed systems"]
+  },
+  {
+    "id": "se_007",
+    "role": "Software Engineer",
+    "category": "technical",
+    "level": "junior",
+    "question": "What is Big O notation and why does it matter?",
+    "model_answer": "Big O notation describes algorithm performance/complexity in terms of input size n. O(1) is constant, O(log n) is logarithmic (binary search), O(n) is linear, O(n log n) is linearithmic (merge sort), O(n²) is quadratic (bubble sort), O(2^n) is exponential. It matters for scalability—an O(n²) algorithm with 1M records is 10^12 operations vs O(n log n) at ~20M operations.",
+    "tips": "Practice analyzing loops, recursion. Know the complexities of common data structures.",
+    "keywords": ["Big O", "time complexity", "space complexity", "algorithms", "scalability"]
+  },
+  {
+    "id": "se_008",
+    "role": "Software Engineer",
+    "category": "hr",
+    "level": "all",
+    "question": "Where do you see yourself in 5 years?",
+    "model_answer": "Frame your answer around growing into a senior/lead role, mentoring others, and contributing to architecture decisions. Align with the company's tech direction. Example: 'I see myself deepening my expertise in distributed systems, potentially moving into a tech lead role where I can mentor junior engineers and influence system design. I'm excited about [company]'s work in [their domain] and would love to contribute to that growth.'",
+    "tips": "Research the company's career ladder beforehand. Show ambition without sounding like you'll leave in 2 years.",
+    "keywords": ["career goals", "5 years", "growth", "ambition", "leadership"]
+  }
+]

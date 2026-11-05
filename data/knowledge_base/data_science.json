@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ds_001",
+    "role": "Data Scientist",
+    "category": "technical",
+    "level": "junior",
+    "question": "What is the difference between supervised and unsupervised learning?",
+    "model_answer": "Supervised learning uses labeled training data to learn a mapping from inputs to outputs (e.g., classification, regression). Unsupervised learning finds patterns in unlabeled data (e.g., clustering with K-means, dimensionality reduction with PCA). Semi-supervised learning uses a mix. Reinforcement learning learns from rewards/penalties through interaction.",
+    "tips": "Give concrete algorithm examples for each. Mention real-world use cases like spam detection (supervised) vs customer segmentation (unsupervised).",
+    "keywords": ["supervised learning", "unsupervised learning", "machine learning", "classification", "clustering"]
+  },
+  {
+    "id": "ds_002",
+    "role": "Data Scientist",
+    "category": "technical",
+    "level": "mid",
+    "question": "How do you handle class imbalance in a dataset?",
+    "model_answer": "Techniques: 1) Resampling - oversample minority class (SMOTE, RandomOverSampler) or undersample majority class. 2) Class weights - assign higher penalty to minority class in loss function. 3) Threshold tuning - adjust classification threshold instead of defaulting to 0.5. 4) Ensemble methods like BalancedRandomForest. 5) Use appropriate metrics: F1-score, AUC-ROC, precision-recall curve instead of accuracy.",
+    "tips": "Always ask what the business cost of false positives vs false negatives is before choosing a technique.",
+    "keywords": ["class imbalance", "SMOTE", "oversampling", "undersampling", "AUC-ROC"]
+  },
+  {
+    "id": "ds_003",
+    "role": "Data Scientist",
+    "category": "technical",
+    "level": "mid",
+    "question": "Explain the bias-variance tradeoff.",
+    "model_answer": "Bias is error from overly simplistic assumptions (underfitting). Variance is error from excessive sensitivity to training data (overfitting). High bias → model misses patterns. High variance → model captures noise. The tradeoff: reducing bias often increases variance and vice versa. Regularization (L1/L2), cross-validation, and ensemble methods help find the sweet spot. Total error = Bias² + Variance + Irreducible error.",
+    "tips": "Draw the U-shaped test error curve. Relate to model complexity and regularization strength.",
+    "keywords": ["bias", "variance", "overfitting", "underfitting", "regularization"]
+  },
+  {
+    "id": "ds_004",
+    "role": "Data Scientist",
+    "category": "technical",
+    "level": "senior",
+    "question": "How would you build an A/B testing framework from scratch?",
+    "model_answer": "Steps: 1) Define hypothesis and success metric clearly. 2) Calculate required sample size using power analysis (effect size, significance level α=0.05, power 1-β=0.8). 3) Randomize users into control/treatment groups ensuring no leakage. 4) Run test for predetermined duration. 5) Analyze with appropriate statistical test (t-test, chi-square). 6) Check for novelty effects and network effects. 7) Make rollout decision based on statistical and practical significance.",
+    "tips": "Mention common pitfalls: peeking, multiple testing problem (Bonferroni correction), SUTVA violations.",
+    "keywords": ["A/B testing", "statistical significance", "sample size", "power analysis", "experimentation"]
+  },
+  {
+    "id": "ds_005",
+    "role": "Data Scientist",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Describe a project where your model failed in production and how you handled it.",
+    "model_answer": "Use STAR: Situation (recommendation model showed declining click-through rates after deployment), Task (diagnose and fix the performance degradation), Action (investigated data drift using PSI/KL divergence, found user behavior shifted post-COVID; implemented model monitoring dashboard, retrained with recent data, added automated retraining pipeline), Result (CTR recovered to baseline + 12%, set up drift alerts for future).",
+    "tips": "Show you have a mature view of ML in production. Data drift, monitoring, and iteration are key signals of experience.",
+    "keywords": ["model failure", "production", "data drift", "monitoring", "retraining"]
+  },
+  {
+    "id": "ds_006",
+    "role": "Data Scientist",
+    "category": "technical",
+    "level": "junior",
+    "question": "What is cross-validation and why is it used?",
+    "model_answer": "Cross-validation is a model evaluation technique that splits data into k folds, trains on k-1 folds and tests on the remaining fold, repeating k times. K-fold CV gives a more reliable performance estimate than a single train/test split by using all data for both training and testing. Common variants: Stratified K-Fold (preserves class distribution), Leave-One-Out (k=n), Time Series Split (for temporal data).",
+    "tips": "Explain why it reduces overfitting to validation set and gives better generalization estimates.",
+    "keywords": ["cross-validation", "k-fold", "model evaluation", "generalization", "overfitting"]
+  },
+  {
+    "id": "ds_007",
+    "role": "Data Scientist",
+    "category": "hr",
+    "level": "all",
+    "question": "How do you communicate complex model results to non-technical stakeholders?",
+    "model_answer": "Focus on business impact over technical metrics. Replace 'AUC-ROC of 0.87' with 'our model correctly identifies 87% of high-risk customers'. Use visualizations (confusion matrix as plain table, feature importance as bar chart). Prepare a one-page summary with: business problem, approach in plain English, key findings, recommended actions, and confidence level. Always connect to business KPIs.",
+    "tips": "Practice the 'explain it to your grandmother' test. Avoid jargon. Lead with insights, not methods.",
+    "keywords": ["communication", "stakeholders", "business impact", "visualization", "storytelling"]
+  }
+]

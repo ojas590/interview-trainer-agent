@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ind_001",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "Tech Industry Interview Culture",
+    "content": "Top tech companies (FAANG/MANGA) use structured interviews: Coding rounds (LeetCode-style), System Design, Behavioral (STAR method), and sometimes a Bar Raiser round. Startups focus more on culture fit, practical problem-solving, and past experience. Investment banks focus heavily on technical accuracy, attention to detail, and pressure-handling. Consulting firms use case interviews (McKinsey, BCG, Bain)."
+  },
+  {
+    "id": "ind_002",
+    "role": "Software Engineer",
+    "category": "industry",
+    "level": "senior",
+    "topic": "System Design Interview Expectations",
+    "content": "Senior engineers are expected to: 1) Clarify requirements before designing, 2) Start with high-level architecture, 3) Dive deep on bottlenecks, 4) Discuss trade-offs explicitly, 5) Talk about scalability (horizontal vs vertical), 6) Address reliability (replication, failover), 7) Mention monitoring and observability. Common topics: URL shortener, Twitter feed, Uber, WhatsApp, Netflix CDN. Practice on system-design-primer on GitHub."
+  },
+  {
+    "id": "ind_003",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "The STAR Interview Method",
+    "content": "STAR = Situation, Task, Action, Result. Situation: Set the context (1-2 sentences). Task: What was your specific responsibility? Action: What did YOU do? Use 'I' not 'we'. Result: Quantifiable outcome. Follow-up with reflection: What would you do differently? Prepare 6-8 STAR stories that can flex to different questions. Map them to: leadership, conflict, failure, success, teamwork, innovation."
+  },
+  {
+    "id": "ind_004",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "Pre-Interview Research Checklist",
+    "content": "Before any interview: 1) Read the job description 3 times and map your experience to each requirement. 2) Research company: business model, recent news, competitors, culture (Glassdoor, Blind). 3) Know the interviewer's LinkedIn profile. 4) Prepare your 'Why this company' answer. 5) Review your own resume—be ready to discuss everything on it. 6) Prepare 5 questions to ask. 7) Test your tech setup for virtual interviews. 8) Plan your outfit and commute for in-person."
+  },
+  {
+    "id": "ind_005",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "Salary Negotiation Best Practices",
+    "content": "Negotiation tips: 1) Never accept on the spot—always ask for time to consider. 2) Get the offer in writing before negotiating. 3) Negotiate base salary, equity/bonus, signing bonus, start date, and remote flexibility. 4) Use competing offers as leverage. 5) Be collaborative: 'I'm very excited about this offer. To help me make this decision, is there flexibility on...' 6) Know your BATNA (Best Alternative To a Negotiated Agreement). 7) Most companies expect negotiation—only 38% of candidates do it."
+  },
+  {
+    "id": "ind_006",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "Common Interview Red Flags to Avoid",
+    "content": "Red flags interviewers watch for: 1) Badmouthing previous employers. 2) Vague answers without specifics or data. 3) Inability to admit mistakes or failures. 4) Lack of curiosity—no questions for the interviewer. 5) Overly rehearsed robotic answers. 6) Not listening and answering a different question. 7) Arrogance vs. confidence. 8) Inconsistencies between resume and verbal answers. 9) Poor communication of technical concepts to non-technical audience."
+  },
+  {
+    "id": "ind_007",
+    "role": "All",
+    "category": "industry",
+    "level": "all",
+    "topic": "Virtual Interview Best Practices",
+    "content": "For video interviews: 1) Test camera, microphone, internet 30 min before. 2) Neutral, well-lit background. 3) Look at the camera, not the screen. 4) Have water nearby. 5) Silence phone notifications. 6) Keep notes off-screen (not visible). 7) Use a quiet room. 8) Dress professionally top to bottom. 9) Log in 5 minutes early. 10) Have a backup plan (phone number of recruiter if tech fails). Virtual interviews are standard post-2020—treat them identically to in-person."
+  }
+]

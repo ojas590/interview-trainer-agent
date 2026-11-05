@@ -1,0 +1,52 @@
+[
+  {
+    "id": "pm_001",
+    "role": "Product Manager",
+    "category": "technical",
+    "level": "all",
+    "question": "How do you prioritize features in a product roadmap?",
+    "model_answer": "Common frameworks: RICE (Reach × Impact × Confidence / Effort), MoSCoW (Must have, Should have, Could have, Won't have), Kano Model (basic needs vs delighters). Process: gather inputs from customers (NPS, support tickets, user research), align with business goals/OKRs, assess engineering effort, consider dependencies. Always make prioritization transparent and revisit quarterly. Example: A feature requested by 500 customers that takes 2 weeks scores higher than a CEO request taking 3 months.",
+    "tips": "Show you balance customer value, business impact, and technical feasibility. Mention data-driven decision-making.",
+    "keywords": ["prioritization", "RICE", "roadmap", "MoSCoW", "product strategy"]
+  },
+  {
+    "id": "pm_002",
+    "role": "Product Manager",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Tell me about a time you had to say no to a feature request.",
+    "model_answer": "STAR: Situation (Sales team requested a custom dashboard for one enterprise client), Task (evaluate against product strategy and team capacity), Action (analyzed: would benefit 1 client, take 6 weeks, distract from platform-wide improvements. Said no with data: showed how upcoming platform feature would serve 80% of their need. Offered the client a workaround via API), Result (client satisfied with solution, platform feature shipped to 200+ customers).",
+    "tips": "Show empathy for the requester while being firm on rationale. 'No, because...' with data is much stronger than just 'no'.",
+    "keywords": ["saying no", "prioritization", "stakeholder management", "product strategy", "data-driven"]
+  },
+  {
+    "id": "pm_003",
+    "role": "Product Manager",
+    "category": "technical",
+    "level": "mid",
+    "question": "How do you define and measure product success?",
+    "model_answer": "Define metrics tied to business goals using frameworks like HEART (Happiness, Engagement, Adoption, Retention, Task Success) or North Star Metric. Example for a SaaS product: North Star = Weekly Active Teams. Leading indicators: feature adoption rate, time-to-value. Lagging indicators: churn rate, NPS, revenue. Set targets upfront, measure via analytics tools (Mixpanel, Amplitude), and review in weekly/monthly rituals.",
+    "tips": "Avoid vanity metrics (page views, downloads without activation). Show you understand the funnel from acquisition to retention.",
+    "keywords": ["product metrics", "KPIs", "HEART framework", "North Star", "success measurement"]
+  },
+  {
+    "id": "pm_004",
+    "role": "Product Manager",
+    "category": "behavioral",
+    "level": "senior",
+    "question": "How do you align engineering, design, and business stakeholders on a product vision?",
+    "model_answer": "Create shared artifacts: a Product Requirements Document (PRD) with clear problem statement, user stories, and success metrics. Run cross-functional kickoff sessions. Use visual tools like experience maps, user journey diagrams. Hold regular syncs but give teams autonomy on 'how'. Escalation path for blockers. Build psychological safety so engineers push back on bad ideas. Result: everyone understands 'what we're building and why'.",
+    "tips": "Show leadership without authority. Emphasize listening to engineering constraints early to avoid surprises.",
+    "keywords": ["alignment", "cross-functional", "PRD", "product vision", "collaboration"]
+  },
+  {
+    "id": "pm_005",
+    "role": "Product Manager",
+    "category": "hr",
+    "level": "all",
+    "question": "Why do you want to be a Product Manager?",
+    "model_answer": "Connect your background to PM skills: if from engineering, highlight technical empathy; if from business, highlight strategic thinking. Show passion for solving user problems, not just shipping features. Example: 'I've always been at the intersection of technology and user needs. As an engineer, I noticed the disconnect between what we built and what users actually wanted. PM allows me to close that gap—talking directly to users, defining what to build, and measuring real-world impact.'",
+    "tips": "Be authentic. PMs who say 'I love building things' without user empathy raise red flags. Show customer obsession.",
+    "keywords": ["motivation", "product management", "career transition", "user empathy", "passion"]
+  }
+]

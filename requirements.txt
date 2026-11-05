@@ -1,0 +1,17 @@
+flask==3.0.3
+flask-cors==4.0.1
+flask-session==0.8.0
+python-dotenv==1.0.1
+ibm-watsonx-ai==1.1.2
+langchain==0.2.16
+langchain-ibm==0.1.12
+langchain-community==0.2.16
+faiss-cpu==1.8.0
+tiktoken==0.7.0
+pypdf2==3.0.1
+python-docx==1.1.2
+requests==2.32.3
+numpy==1.26.4
+pydantic==2.8.2
+gunicorn==23.0.0
+fpdf2==2.8.1

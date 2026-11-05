@@ -1,0 +1,202 @@
+[
+  {
+    "id": "common_001",
+    "role": "All",
+    "category": "technical",
+    "level": "all",
+    "question": "What is the difference between a process and a thread?",
+    "model_answer": "A process is an independent program in execution with its own memory space, file handles, and resources. A thread is a lightweight unit of execution within a process that shares the process's memory and resources. Processes are isolated from each other (IPC needed to communicate), while threads share memory directly (requires synchronization). Threads are faster to create/switch but introduce concurrency bugs; processes are safer but heavier.",
+    "tips": "Give a concrete example: a web browser where each tab can be a process, and each tab's JS engine uses threads internally.",
+    "keywords": ["process", "thread", "concurrency", "memory", "operating system"]
+  },
+  {
+    "id": "common_002",
+    "role": "All",
+    "category": "technical",
+    "level": "junior",
+    "question": "Explain the difference between SQL and NoSQL databases.",
+    "model_answer": "SQL databases are relational, use structured schemas with tables/rows/columns, support ACID transactions, and use SQL for queries (e.g., PostgreSQL, MySQL). NoSQL databases are non-relational, schema-flexible, optimized for scale and specific data models: document (MongoDB), key-value (Redis), column-family (Cassandra), graph (Neo4j). Use SQL when data is structured and consistent; use NoSQL for high-volume, flexible, or hierarchical data.",
+    "tips": "Mention when you'd choose each. Interviewers want to see you know trade-offs, not just definitions.",
+    "keywords": ["SQL", "NoSQL", "relational", "ACID", "database"]
+  },
+  {
+    "id": "common_003",
+    "role": "All",
+    "category": "technical",
+    "level": "mid",
+    "question": "What is Docker and how does containerization differ from virtualization?",
+    "model_answer": "Docker is a platform for containerizing applications. Containers package code + dependencies + runtime into isolated units that share the host OS kernel — they're lightweight (MB vs GB) and start in seconds. Virtual machines (VMs) run a full OS including kernel on hypervisor — heavier but stronger isolation. Containers are ideal for microservices, CI/CD pipelines, and consistent environments across dev/prod.",
+    "tips": "Draw the VM vs container architecture diagram. Mention Kubernetes as the orchestration layer above Docker.",
+    "keywords": ["Docker", "containers", "virtualization", "microservices", "Kubernetes"]
+  },
+  {
+    "id": "common_004",
+    "role": "All",
+    "category": "technical",
+    "level": "mid",
+    "question": "What is CI/CD and why is it important?",
+    "model_answer": "CI (Continuous Integration) is the practice of automatically building and testing code every time a developer pushes changes, catching bugs early. CD (Continuous Delivery/Deployment) extends CI to automatically deploy tested code to staging or production. Benefits: faster release cycles, higher quality, reduced manual errors, smaller deployable units (easier rollback). Tools: Jenkins, GitHub Actions, GitLab CI, CircleCI.",
+    "tips": "Describe a specific pipeline you've worked with. Mention testing gates (unit, integration, e2e) and rollback strategies.",
+    "keywords": ["CI/CD", "continuous integration", "continuous deployment", "automation", "DevOps"]
+  },
+  {
+    "id": "common_005",
+    "role": "All",
+    "category": "technical",
+    "level": "senior",
+    "question": "How do you approach system security in your applications?",
+    "model_answer": "Defense in depth: 1) Input validation and sanitization (prevent SQL injection, XSS). 2) Authentication/authorization (OAuth2, JWT, RBAC). 3) Secrets management (never hardcode credentials; use Vault, AWS Secrets Manager). 4) HTTPS everywhere, TLS 1.2+. 5) Dependency scanning (Snyk, Dependabot). 6) Least privilege principle for services. 7) Security headers (CORS, CSP, HSTS). 8) Audit logging for sensitive actions. Regular pen testing and OWASP Top 10 awareness.",
+    "tips": "Give a specific example of a vulnerability you prevented or fixed. Show you think about security proactively.",
+    "keywords": ["security", "authentication", "authorization", "OWASP", "secrets management"]
+  },
+  {
+    "id": "common_006",
+    "role": "All",
+    "category": "technical",
+    "level": "junior",
+    "question": "What is version control and why do we use Git?",
+    "model_answer": "Version control tracks changes to code over time, enabling collaboration, history, and rollback. Git is a distributed VCS where every developer has a full local copy. Key concepts: repositories, commits (snapshots), branches (parallel development), merging, pull requests (code review). Branching strategies like Git Flow or trunk-based development manage release cycles. Git enables teams to work simultaneously without overwriting each other's changes.",
+    "tips": "Know git commands: branch, merge, rebase, cherry-pick, stash. Be ready to explain a merge conflict resolution.",
+    "keywords": ["Git", "version control", "branching", "merge", "pull request"]
+  },
+  {
+    "id": "common_007",
+    "role": "All",
+    "category": "technical",
+    "level": "mid",
+    "question": "Explain the concept of microservices architecture.",
+    "model_answer": "Microservices decompose a monolithic application into small, independently deployable services, each owning a specific business capability and data store. Benefits: independent scaling, technology diversity, fault isolation, smaller deployments. Challenges: distributed systems complexity (network failures, latency), data consistency across services (eventual consistency, sagas), service discovery, distributed tracing. Best suited for large teams and complex domains.",
+    "tips": "Compare to monolith trade-offs. Mention when NOT to use microservices (small teams, early stage). Show you understand the operational complexity.",
+    "keywords": ["microservices", "distributed systems", "architecture", "service mesh", "API gateway"]
+  },
+  {
+    "id": "common_008",
+    "role": "All",
+    "category": "technical",
+    "level": "all",
+    "question": "What is recursion and when would you use it?",
+    "model_answer": "Recursion is when a function calls itself with a smaller subproblem until it reaches a base case. Useful for: tree/graph traversal, divide-and-conquer algorithms (merge sort, binary search), parsing nested structures (JSON, HTML). Pitfalls: stack overflow for deep recursion, higher memory usage vs iteration. In those cases, convert to iterative using an explicit stack. Memoization (caching results) can optimize recursive solutions.",
+    "tips": "Always identify: 1) base case, 2) recursive case, 3) how the problem gets smaller. Practice tree traversals.",
+    "keywords": ["recursion", "base case", "stack overflow", "tree traversal", "algorithms"]
+  },
+  {
+    "id": "common_009",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Describe a time you had to learn a new technology quickly.",
+    "model_answer": "STAR: Situation (team adopted Kubernetes mid-project; I had no experience), Task (get productive within one week for a production deployment), Action (spent 4 hours daily on Kubernetes docs + hands-on labs, set up a local cluster with minikube, shadowed a senior engineer, built a simple demo service end-to-end), Result (deployed our first service to Kubernetes on schedule, wrote an internal quickstart guide that onboarded 3 other engineers). Key: structured learning + immediate application.",
+    "tips": "Show your learning process, not just the outcome. Mention resources you used and how you applied knowledge immediately.",
+    "keywords": ["learning", "adaptability", "new technology", "self-development", "onboarding"]
+  },
+  {
+    "id": "common_010",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Tell me about a time you worked in a team under pressure.",
+    "model_answer": "STAR: Situation (production outage on Black Friday — our payment service was returning 503 errors affecting 20% of transactions), Task (diagnose and fix within 2-hour SLA window), Action (formed a war room: split into diagnosis (me), communication (PM), customer rollback (ops). I identified the root cause — a database connection pool exhaustion from a query regression. Pushed a hotfix in 45 min), Result (service restored in 1.5 hours, handled post-mortem, implemented circuit breaker to prevent recurrence). Show calm leadership under pressure.",
+    "tips": "Emphasize your specific role in the team, not collective 'we did'. Show how you stayed calm and structured.",
+    "keywords": ["teamwork", "pressure", "incident response", "collaboration", "leadership"]
+  },
+  {
+    "id": "common_011",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "How do you handle receiving negative feedback?",
+    "model_answer": "STAR: Situation (manager told me my code reviews were too critical and discouraging junior developers), Task (change my review style without lowering quality standards), Action (researched 'kind code reviews', adopted the feedback sandwich (positive-improvement-positive), started asking questions instead of stating problems ('what do you think about extracting this into a function?'), followed up with reviewees 1:1 after tough reviews), Result (team satisfaction scores in quarterly survey improved; junior developer told me my reviews helped them learn the most). Key: listen first, don't get defensive.",
+    "tips": "Show you can receive AND act on feedback. Avoid saying 'I always welcome feedback' without substance.",
+    "keywords": ["feedback", "growth mindset", "communication", "professional development", "receptiveness"]
+  },
+  {
+    "id": "common_012",
+    "role": "All",
+    "category": "behavioral",
+    "level": "mid",
+    "question": "Describe a project where you took ownership beyond your defined role.",
+    "model_answer": "STAR: Situation (our team's CI pipeline was failing intermittently for 3 weeks, slowing everyone down), Task (nobody owned it; as a backend engineer, it wasn't my responsibility), Action (voluntarily investigated on my own time, found flaky tests caused by shared test database state, refactored test isolation, added retry logic, documented the fix in the team wiki), Result (CI reliability went from 60% to 98%, team velocity improved measurably. Was recognized in quarterly review). Shows initiative and engineering citizenship.",
+    "tips": "Show the impact on the team, not just that you did extra work. Frame it as caring about team success.",
+    "keywords": ["ownership", "initiative", "proactive", "engineering citizenship", "impact"]
+  },
+  {
+    "id": "common_013",
+    "role": "All",
+    "category": "behavioral",
+    "level": "senior",
+    "question": "Tell me about a time you influenced a technical decision without direct authority.",
+    "model_answer": "STAR: Situation (team was about to choose MongoDB for a project with complex relational data), Task (I had concerns but wasn't the tech lead), Action (prepared a 1-page trade-off document with concrete examples of where MongoDB would struggle with our schema, proposed PostgreSQL with JSONB for flexibility. Presented to the team in architecture review, invited discussion, not debate), Result (team chose PostgreSQL; 6 months later the relational queries we needed would have been extremely painful in MongoDB. Tech lead credited the decision in a retrospective). Key: data > opinion, invite collaboration.",
+    "tips": "Show influence through evidence and collaboration, not politics or force. This tests leadership maturity.",
+    "keywords": ["influence", "leadership", "technical decision", "persuasion", "collaboration"]
+  },
+  {
+    "id": "common_014",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "How do you manage your workload when you have multiple deadlines?",
+    "model_answer": "Prioritization framework: First, clarify all deadlines and their business impact — not all deadlines are equal. Use a prioritization matrix (urgency × impact). Communicate early if something is at risk (don't wait until it's too late). Break large tasks into smaller milestones. Use time-blocking to protect deep work time. Tools: Jira for tracking, calendar blocking, weekly planning ritual. If truly overloaded, negotiate scope or timeline with stakeholders, not silence. Key: proactive communication beats heroics.",
+    "tips": "Give a specific example. Show you prioritize by business impact, not by who asks loudest.",
+    "keywords": ["time management", "prioritization", "deadlines", "productivity", "communication"]
+  },
+  {
+    "id": "common_015",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "What motivates you in your work?",
+    "model_answer": "Authentic motivators to choose from: solving hard technical problems, seeing your work used by real users, mentoring and growing others, learning new domains, building systems that scale, making a measurable impact. Example: 'I'm most motivated when I can see the direct impact of my work — whether that's a feature used by thousands of people or a performance improvement that cuts page load time significantly. The combination of technical challenge and real-world feedback keeps me energized.' Avoid: 'I love my paycheck' or overly corporate answers.",
+    "tips": "Be authentic — interviewers can tell when it's rehearsed. Connect your motivators to the role you're interviewing for.",
+    "keywords": ["motivation", "passion", "drive", "job satisfaction", "values"]
+  },
+  {
+    "id": "common_016",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "How do you stay up to date with industry trends and new technologies?",
+    "model_answer": "Be specific about your actual sources: newsletters (TLDR, Morning Brew Tech), podcasts (Software Engineering Daily, Lex Fridman), communities (Hacker News, Reddit r/programming), conferences (virtual: KubeCon, PyCon, QCon), following engineering blogs (Netflix Tech Blog, Stripe Engineering, Airbnb Engineering), GitHub trending, Twitter/X tech accounts. Show you're curious beyond your day job. Example: 'I spend 30 minutes each morning reading Hacker News and recently noticed the RAG pattern gaining traction, which I then prototyped at work.'",
+    "tips": "Name specific sources. Saying 'I read blogs' is weak. Show curiosity and how you apply what you learn.",
+    "keywords": ["continuous learning", "industry trends", "self-development", "curiosity", "professional growth"]
+  },
+  {
+    "id": "common_017",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "Describe your ideal work environment.",
+    "model_answer": "Focus on factors that align with the company while being genuine. Consider: collaboration style (async vs. real-time), feedback culture, autonomy vs. direction, technical rigour, work-life balance, remote/hybrid preference. Example: 'I thrive in environments with clear goals but autonomy in how I achieve them. I value strong code review culture, regular 1:1s with my manager, and a team that gives honest feedback. I prefer async communication for deep work with synchronous time reserved for complex problem-solving.' Research the company's culture before answering.",
+    "tips": "Mirror what the company values (from their job description/Glassdoor). But be honest — a mismatch surfaces quickly.",
+    "keywords": ["work environment", "culture", "collaboration", "autonomy", "remote work"]
+  },
+  {
+    "id": "common_018",
+    "role": "All",
+    "category": "technical",
+    "level": "all",
+    "question": "What is the difference between synchronous and asynchronous programming?",
+    "model_answer": "Synchronous programming executes operations sequentially — each line waits for the previous one to complete. Asynchronous programming allows operations (especially I/O-bound tasks) to run without blocking, using callbacks, promises, async/await. Example: a synchronous HTTP request blocks the entire thread; an async one releases the thread to do other work while waiting. In Python: asyncio + await; in JavaScript: Promises + async/await; in Java: CompletableFuture. Critical for high-throughput servers and UI responsiveness.",
+    "tips": "Give concrete examples from languages you know. Mention event loops, thread pools, and when to use each pattern.",
+    "keywords": ["synchronous", "asynchronous", "async/await", "event loop", "concurrency"]
+  },
+  {
+    "id": "common_019",
+    "role": "All",
+    "category": "technical",
+    "level": "mid",
+    "question": "How do you approach writing unit tests?",
+    "model_answer": "Follow the AAA pattern: Arrange (set up test data and mocks), Act (call the function under test), Assert (verify the outcome). Test one thing per test. Name tests descriptively: test_should_return_404_when_user_not_found. Aim for high coverage of business logic, not 100% overall. Use mocks/stubs to isolate units from external dependencies. Don't test implementation details — test behavior. TDD (test-first) is valuable for complex logic. Use parameterized tests for boundary conditions.",
+    "tips": "Show you understand the difference between unit, integration, and e2e tests. Mention what NOT to unit test (infrastructure, trivial getters).",
+    "keywords": ["unit testing", "TDD", "mocks", "test coverage", "AAA pattern"]
+  },
+  {
+    "id": "common_020",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Give an example of when you improved a process or workflow.",
+    "model_answer": "STAR: Situation (deployments required a 5-step manual checklist prone to human error, causing 2 rollbacks per month), Task (reduce deployment errors and time), Action (automated the checklist into a GitHub Actions workflow, added automated smoke tests post-deploy, added Slack notifications with deployment metadata, documented the new process), Result (zero manual deployment errors in 6 months, deployment time reduced from 45 min to 12 min, process adopted as the standard for all 6 services in our org). Show systematic improvement thinking.",
+    "tips": "Quantify before and after. Show ownership of the solution, not just spotting the problem.",
+    "keywords": ["process improvement", "automation", "efficiency", "initiative", "impact"]
+  }
+]

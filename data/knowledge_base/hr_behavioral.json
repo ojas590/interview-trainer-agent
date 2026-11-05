@@ -1,0 +1,72 @@
+[
+  {
+    "id": "hr_001",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "Tell me about yourself.",
+    "model_answer": "Use the Present-Past-Future framework: Start with your current role and key accomplishments, then briefly mention your educational/professional background that's relevant, then explain why you're excited about this opportunity. Keep it to 90 seconds. Example: 'Currently I'm a senior software engineer at XYZ, where I led migration of a monolith to microservices reducing deployment time by 70%. Before that I graduated from ABC with a CS degree and started in backend development. I'm excited about this role because [specific company/team reason].'",
+    "tips": "Rehearse until natural. End with a bridge to why you want THIS job at THIS company. No life story.",
+    "keywords": ["introduction", "tell me about yourself", "elevator pitch", "first impression"]
+  },
+  {
+    "id": "hr_002",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "What is your greatest weakness?",
+    "model_answer": "Pick a real weakness that isn't a core job requirement, show self-awareness, and demonstrate active improvement. Example: 'I used to struggle with delegating—I'd rather redo tasks than trust others to meet my standards. I recognized this was limiting my team's growth and mine. Now I use a trust-but-verify approach: I define clear success criteria upfront, check in at milestones, and celebrate when the outcome is different but equally good from mine.' Avoid fake weaknesses like 'I'm a perfectionist'.",
+    "tips": "Interviewers spot fake weaknesses immediately. Show growth mindset—weakness + concrete steps + progress.",
+    "keywords": ["weakness", "self-awareness", "improvement", "growth mindset", "honesty"]
+  },
+  {
+    "id": "hr_003",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "Why are you leaving your current job?",
+    "model_answer": "Never badmouth your current employer. Focus on what you're moving toward, not running from. Positive framings: seeking greater challenge/scope, want to work in a specific domain/technology, company direction changed from your interests, seeking leadership opportunities not available in current role. Example: 'I've grown a lot at my current company and I'm grateful for it. I'm now looking for a role where I can work on larger-scale systems and have more impact on product direction—which is why this role at [company] is so compelling.'",
+    "tips": "Research the new company thoroughly so your 'moving toward' reason is specific and credible.",
+    "keywords": ["leaving current job", "motivation", "career change", "professionalism"]
+  },
+  {
+    "id": "hr_004",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Describe a situation where you had a conflict with a team member. How did you resolve it?",
+    "model_answer": "STAR: Situation (disagreed with colleague on tech stack choice for new service—they wanted Java, I wanted Go), Task (resolve without damaging relationship or delaying project), Action (set up a dedicated meeting, each presented pros/cons with data. Acknowledged their valid points about team Java expertise. Proposed a compromise: Go for the new service with a 2-week knowledge-sharing plan. Got team buy-in), Result (shipped on time, team learned Go, colleague became a Go advocate 6 months later). Key: focus on the issue, not the person.",
+    "tips": "Show you can disagree professionally. Avoid making the other person look bad. Emphasize listening.",
+    "keywords": ["conflict resolution", "collaboration", "communication", "professionalism", "STAR method"]
+  },
+  {
+    "id": "hr_005",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "What are your salary expectations?",
+    "model_answer": "Research market rates first (Glassdoor, Levels.fyi, LinkedIn Salary, Payscale). Give a range where your target is at the lower-middle of the range. Example: 'Based on my research of market rates for this role and location, and given my 5 years of experience in [relevant skills], I'm targeting a range of $110,000-$130,000 in base salary. That said, I'm open to discussing the full compensation package including equity and benefits.' Deflect early in process: 'I'd love to learn more about the role before discussing numbers.'",
+    "tips": "Never give a number first if you can avoid it. Know your walk-away number before the interview.",
+    "keywords": ["salary", "compensation", "negotiation", "market research", "expectations"]
+  },
+  {
+    "id": "hr_006",
+    "role": "All",
+    "category": "hr",
+    "level": "all",
+    "question": "Do you have any questions for us?",
+    "model_answer": "Always have 3-5 questions prepared. Good questions: 'What does success look like in this role in the first 90 days?', 'What are the biggest challenges the team is currently facing?', 'How has the company/team changed in the past year?', 'What do you enjoy most about working here?', 'What are the opportunities for professional development?'. Avoid questions about salary (unless they bring it up) or benefits in first interview. Never say 'No, I think you've covered everything'.",
+    "tips": "Questions you ask signal your priorities and how prepared you are. Asking about growth shows ambition.",
+    "keywords": ["questions to ask", "interview preparation", "curiosity", "engagement"]
+  },
+  {
+    "id": "hr_007",
+    "role": "All",
+    "category": "behavioral",
+    "level": "all",
+    "question": "Tell me about a time you failed and what you learned from it.",
+    "model_answer": "STAR: Situation (led a feature launch that was rolled back after 48 hours due to performance regression), Task (minimize customer impact and understand root cause), Action (immediate rollback, post-mortem within 24 hours—found I hadn't load tested with production-scale data. Implemented load testing gates in CI/CD pipeline, created runbook for future launches), Result (next 5 launches had zero rollbacks. Post-mortem culture adopted by team). Show accountability without excessive self-flagellation.",
+    "tips": "Pick a real failure. Show you take responsibility, extracted lessons, and implemented changes. Not 'the team failed'.",
+    "keywords": ["failure", "learning", "resilience", "accountability", "growth"]
+  }
+]

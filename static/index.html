@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Trainer Agent — Powered by IBM Granite</title>
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --card: #1a2235;
+      --border: #2d3748;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --ibm-blue: #0f62fe;
+      --ibm-teal: #007d79;
+      --gradient: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ─── Layout ─── */
+    .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ─── Header ─── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo {
+      width: 36px;
+      height: 36px;
+      background: var(--gradient);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-badge {
+      font-size: 11px;
+      background: rgba(15, 98, 254, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(15, 98, 254, 0.4);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── Main ─── */
+    .main { flex: 1; display: flex; overflow: hidden; }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 12px;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 8px 12px 4px;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { background: var(--card); color: var(--text); }
+    .nav-btn.active { background: rgba(59, 130, 246, 0.15); color: var(--accent); }
+    .nav-btn .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ─── Content ─── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
+      max-width: 900px;
+    }
+
+    /* ─── Pages ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── Cards ─── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ─── Forms ─── */
+    .form-group { margin-bottom: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    textarea { resize: vertical; min-height: 100px; }
+    select option { background: var(--surface); }
+
+    /* ─── Tags input ─── */
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      min-height: 44px;
+      align-items: center;
+      cursor: text;
+    }
+    .tags-container:focus-within { border-color: var(--accent); }
+    .tag {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 13px;
+    }
+    .tag-remove {
+      background: none;
+      border: none;
+      color: #60a5fa;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+    }
+    .tag-input {
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      flex: 1;
+      min-width: 100px;
+      padding: 2px 4px;
+    }
+
+    /* ─── Buttons ─── */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn-full { width: 100%; justify-content: center; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+    /* ─── Question Cards ─── */
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .question-card:hover { border-color: var(--accent); }
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .q-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .q-text { flex: 1; font-size: 15px; font-weight: 500; line-height: 1.4; }
+    .q-meta {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+    .badge-technical { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge-behavioral { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+    .badge-hr { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-other { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+    .badge-easy { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-medium { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge-hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .q-chevron { font-size: 12px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; }
+    .question-card.expanded .q-chevron { transform: rotate(180deg); }
+
+    .question-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .question-card.expanded .question-body { display: block; }
+
+    .answer-section { margin-top: 16px; }
+    .answer-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .answer-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--surface);
+      padding: 14px;
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+    .tips-text {
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(16, 185, 129, 0.05);
+      border-left: 3px solid var(--success);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .keywords { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .keyword { font-size: 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; color: var(--muted); }
+
+    .practice-area { margin-top: 16px; }
+    .practice-area textarea { background: rgba(59, 130, 246, 0.05); }
+    .eval-result {
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .score-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      border: 3px solid;
+    }
+    .score-good { border-color: var(--success); color: var(--success); }
+    .score-ok { border-color: var(--warning); color: var(--warning); }
+    .score-low { border-color: var(--danger); color: var(--danger); }
+
+    /* ─── Strategy ─── */
+    .strategy-text {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .strategy-text p { margin-bottom: 10px; }
+    .strategy-text h1, .strategy-text h2, .strategy-text h3 {
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+      margin: 14px 0 6px;
+    }
+    .strategy-text strong, .strategy-text b { color: var(--accent); }
+    .strategy-text ul, .strategy-text ol {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+    .strategy-text li { margin-bottom: 4px; }
+    .strategy-text code {
+      background: var(--surface);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+    .booster-list { list-style: none; }
+    .booster-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .booster-item:last-child { border-bottom: none; }
+    .booster-icon { color: var(--success); font-size: 16px; flex-shrink: 0; }
+
+    /* ─── Stats bar ─── */
+    .stats-bar { display: flex; gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-number { font-size: 28px; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+    .hero-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .hero p { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 28px; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+    .feature-icon { font-size: 28px; margin-bottom: 10px; }
+    .feature-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─── Progress bar ─── */
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--gradient);
+      transition: width 0.5s ease;
+    }
+
+    /* ─── Loading ─── */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 48px;
+      text-align: center;
+    }
+    .loading-spinner-lg {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(59, 130, 246, 0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .loading-text { color: var(--muted); font-size: 15px; }
+
+    /* ─── Toast ─── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+    }
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      max-width: 320px;
+      animation: slideIn 0.3s ease;
+      border-left: 4px solid;
+    }
+    .toast-success { background: rgba(16, 185, 129, 0.15); border-color: var(--success); color: #6ee7b7; }
+    .toast-error { background: rgba(239, 68, 68, 0.15); border-color: var(--danger); color: #fca5a5; }
+    .toast-info { background: rgba(59, 130, 246, 0.15); border-color: var(--accent); color: #93c5fd; }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* ─── IBM branding ─── */
+    .ibm-banner {
+      background: linear-gradient(135deg, rgba(15, 98, 254, 0.1), rgba(0, 125, 121, 0.1));
+      border: 1px solid rgba(15, 98, 254, 0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .ibm-logo-text {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--ibm-blue);
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .content { padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .stats-bar { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="header-logo">🎯</div>
+      <div>
+        <div class="header-title">Interview Trainer Agent</div>
+      </div>
+      <span class="header-badge">IBM Granite</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="status-dot" id="statusDot"></div>
+      <span style="font-size:13px;color:var(--muted);" id="statusText">Initializing...</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section-label">Navigation</div>
+      <button class="nav-btn active" onclick="showPage('home')" id="nav-home">
+        <span class="nav-icon">🏠</span> Home
+      </button>
+      <button class="nav-btn" onclick="showPage('profile')" id="nav-profile">
+        <span class="nav-icon">👤</span> My Profile
+      </button>
+      <button class="nav-btn" onclick="showPage('resume')" id="nav-resume">
+        <span class="nav-icon">📄</span> Resume Analyzer
+      </button>
+      <button class="nav-btn" onclick="showPage('questions')" id="nav-questions">
+        <span class="nav-icon">❓</span> Questions
+      </button>
+      <button class="nav-btn" onclick="showPage('practice')" id="nav-practice">
+        <span class="nav-icon">🎤</span> Practice Mode
+      </button>
+      <button class="nav-btn" onclick="showPage('strategy')" id="nav-strategy">
+        <span class="nav-icon">📋</span> Prep Strategy
+      </button>
+      <button class="nav-btn" onclick="showPage('history')" id="nav-history">
+        <span class="nav-icon">📈</span> History
+      </button>
+
+      <div class="sidebar-section-label" style="margin-top:16px;">Quick Actions</div>
+      <button class="nav-btn" onclick="quickGenerate()">
+        <span class="nav-icon">⚡</span> Quick Generate
+      </button>
+      <button class="nav-btn" onclick="showPage('about')">
+        <span class="nav-icon">ℹ️</span> About
+      </button>
+    </nav>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- ── HOME PAGE ── -->
+      <div class="page active" id="page-home">
+        <div class="hero">
+          <div class="hero-icon">🎯</div>
+          <h1>Interview Trainer Agent</h1>
+          <p>AI-powered interview preparation with IBM Granite — personalized questions, model answers, and coaching strategies tailored to your profile.</p>
+          <button class="btn btn-primary" style="font-size:15px;padding:12px 28px;" onclick="showPage('profile')">
+            🚀 Start Preparing Now
+          </button>
+        </div>
+
+        <div class="ibm-banner">
+          <div class="ibm-logo-text">IBM</div>
+          <div>
+            <strong>Powered by IBM Granite & watsonx.ai</strong><br>
+            Using <code>ibm/granite-3-3-8b-instruct</code> with RAG (Retrieval-Augmented Generation) for accurate, role-specific interview coaching.
+          </div>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-title">RAG-Powered Questions</div>
+            <div class="feature-desc">Retrieves role-specific questions from a curated knowledge base, then generates personalized variations using IBM Granite.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-title">Tailored to Your Profile</div>
+            <div class="feature-desc">Questions adapt to your job title, experience level, and skills. Junior vs Senior answers are completely different.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <div class="feature-title">Answer Evaluation</div>
+            <div class="feature-desc">Submit your practice answers and get instant AI feedback with a score, strengths, improvements, and a revised example.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Full Coverage</div>
+            <div class="feature-desc">Technical, behavioral, and HR questions. STAR method coaching, salary negotiation tips, and system design frameworks.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <div class="feature-title">2-Week Strategy</div>
+            <div class="feature-desc">Get a day-by-day preparation roadmap with resources, daily routines, and priority areas based on your specific role.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💪</div>
+            <div class="feature-title">Confidence Building</div>
+            <div class="feature-desc">Personalized affirmations and confidence boosters derived from your actual background and experience.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROFILE PAGE ── -->
+      <div class="page" id="page-profile">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">👤 Your Profile</h2>
+        <p style="color:var(--muted);margin-bottom:24px;">Tell us about yourself to get tailored interview preparation.</p>
+
+        <div class="card">
+          <div class="card-title">📝 Basic Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="inp-name" placeholder="e.g. Alex Johnson" />
+            </div>
+            <div class="form-group">
+              <label>Target Job Title</label>
+              <input type="text" id="inp-jobtitle" placeholder="e.g. Software Engineer" list="roles-list" />
+              <datalist id="roles-list">
+                <option value="Software Engineer">
+                <option value="Data Scientist">
+                <option value="Product Manager">
+                <option value="DevOps Engineer">
+                <option value="Machine Learning Engineer">
+                <option value="Frontend Developer">
+                <option value="Backend Developer">
+                <option value="Full Stack Developer">
+                <option value="Business Analyst">
+                <option value="UX Designer">
+              </datalist>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Experience Level</label>
+              <select id="inp-level">
+                <option value="">Select level...</option>
+                <option value="junior">Junior (0-2 years)</option>
+                <option value="mid">Mid-Level (3-5 years)</option>
+                <option value="senior">Senior (6+ years)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Target Company (Optional)</label>
+              <input type="text" id="inp-company" placeholder="e.g. Google, Microsoft..." />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Key Skills (press Enter or comma to add)</label>
+            <div class="tags-container" id="skills-container" onclick="document.getElementById('skill-input').focus()">
+              <input type="text" class="tag-input" id="skill-input" placeholder="Add skill..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📄 Resume / Background (Optional)</div>
+          <div class="form-group">
+            <label>Paste your resume text or describe your background</label>
+            <textarea id="inp-resume" placeholder="Paste your resume text here, or describe your work experience and key achievements. This helps the AI generate more personalized questions..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Focus Areas</label>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
+                <input type="checkbox" id="focus-technical" checked style="width:auto;accent-color:var(--accent);" /> Technical
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
+                <input type="checkbox" id="focus-behavioral" checked style="width:auto;accent-color:var(--accent);" /> Behavioral
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
+                <input type="checkbox" id="focus-hr" checked style="width:auto;accent-color:var(--accent);" /> HR & Soft Skills
+              </label>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+            <button class="btn btn-secondary" onclick="generateFullSession()">🚀 Generate Full Session</button>
+          </div>
+        </div>
+
+        <div id="profile-saved-msg" style="display:none;" class="ibm-banner">
+          ✅ Profile saved! Head to <strong>Questions</strong> or <strong>Prep Strategy</strong> tabs.
+        </div>
+      </div>
+
+      <!-- ── QUESTIONS PAGE ── -->
+      <div class="page" id="page-questions">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">❓ Interview Questions</h2>
+        <p style="color:var(--muted);margin-bottom:20px;">Personalized questions generated by IBM Granite based on your profile.</p>
+
+        <div id="q-controls" class="card">
+          <div class="card-title">⚙️ Generation Settings</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Number of Questions</label>
+              <select id="q-num">
+                <option value="5">5 questions</option>
+                <option value="10" selected>10 questions</option>
+                <option value="15">15 questions</option>
+                <option value="20">20 questions</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label>Filter by Category</label>
+                <select id="q-filter">
+                  <option value="">All Categories</option>
+                  <option value="technical">Technical Only</option>
+                  <option value="behavioral">Behavioral Only</option>
+                  <option value="hr">HR Only</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Difficulty Level</label>
+                <select id="q-difficulty">
+                  <option value="">Mixed (Easy + Medium + Hard)</option>
+                  <option value="easy">Easy Only</option>
+                  <option value="medium">Medium Only</option>
+                  <option value="hard">Hard Only</option>
+                </select>
+              </div>
+              <div class="form-group" style="display:flex;align-items:flex-end;">
+                <button class="btn btn-primary btn-full" onclick="generateQuestions()" id="gen-btn">
+                  ⚡ Generate Questions
+                </button>
+              </div>
+            </div>
+        </div>
+
+        <div class="loading-overlay" id="q-loading">
+          <div class="loading-spinner-lg"></div>
+          <div class="loading-text">IBM Granite is generating your personalized questions...<br><span style="font-size:13px;">This may take 15-30 seconds</span></div>
+        </div>
+
+        <div id="q-stats" style="display:none;" class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-number" id="stat-total">0</div>
+            <div class="stat-label">Total Questions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-tech">0</div>
+            <div class="stat-label">Technical</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-beh">0</div>
+            <div class="stat-label">Behavioral</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="stat-hr">0</div>
+            <div class="stat-label">HR</div>
+          </div>
+        </div>
+
+        <div id="q-list"></div>
+      </div>
+
+      <!-- ── PRACTICE MODE ── -->
+      <div class="page" id="page-practice">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">🎤 Practice Mode</h2>
+        <p style="color:var(--muted);margin-bottom:24px;">Type your answer and get instant AI feedback powered by IBM Granite.</p>
+
+        <div class="card">
+          <div class="card-title">📝 Practice Question</div>
+          <div class="form-group">
+            <label>Select or type a question</label>
+            <select id="practice-q-select" onchange="loadPracticeQuestion()">
+              <option value="">— Select a question from your session —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Or type a custom question</label>
+            <input type="text" id="practice-q-custom" placeholder="Type any interview question..." />
+          </div>
+          <div class="form-group">
+            <label>Your Answer</label>
+            <textarea id="practice-answer" placeholder="Type your answer here (minimum 20 characters)..." style="min-height:150px;"></textarea>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <button class="btn btn-primary" onclick="evaluateAnswer()" id="eval-btn">
+              🤖 Evaluate My Answer
+            </button>
+            <span id="eval-loading" style="display:none;color:var(--muted);font-size:13px;"><span class="spinner"></span> Evaluating...</span>
+          </div>
+        </div>
+
+        <div id="eval-results" style="display:none;">
+          <div class="card">
+            <div class="card-title">📊 Evaluation Results</div>
+            <div class="score-display">
+              <div class="score-circle" id="score-circle">—</div>
+              <div>
+                <div style="font-size:16px;font-weight:700;" id="score-label">—</div>
+                <div style="font-size:13px;color:var(--muted);" id="score-feedback">—</div>
+              </div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:0%"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">💪 Strengths</div>
+            <ul id="eval-strengths" style="list-style:none;"></ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🎯 Improvements</div>
+            <ul id="eval-improvements" style="list-style:none;"></ul>
+          </div>
+          <div class="card">
+            <div class="card-title">✨ Stronger Answer Example</div>
+            <div class="answer-text" id="eval-revised"></div>
+          </div>
+          <!-- Feature 4: PDF download button shown after evaluation -->
+          <div class="card" id="pdf-report-card" style="display:none;">
+            <div class="card-title">📥 Download Report</div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Export your session results as a formatted PDF report including scores, feedback, and your prep strategy.</p>
+            <button class="btn btn-secondary" onclick="downloadPdfReport()" id="pdf-btn">
+              📄 Download PDF Report
+            </button>
+            <span id="pdf-loading" style="display:none;color:var(--muted);font-size:13px;margin-left:12px;"><span class="spinner"></span> Generating...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STRATEGY PAGE ── -->
+      <div class="page" id="page-strategy">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">📋 Prep Strategy</h2>
+        <p style="color:var(--muted);margin-bottom:24px;">Your personalized 2-week interview preparation roadmap.</p>
+
+        <button class="btn btn-primary" onclick="generateStrategy()" id="strat-btn" style="margin-bottom:20px;">
+          🗺️ Generate My Strategy
+        </button>
+
+        <div class="loading-overlay" id="strat-loading">
+          <div class="loading-spinner-lg"></div>
+          <div class="loading-text">IBM Granite is crafting your strategy...</div>
+        </div>
+
+        <div id="strat-content" style="display:none;">
+          <div class="card">
+            <div class="card-title">🗺️ 2-Week Preparation Plan</div>
+            <div class="strategy-text" id="strategy-text"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">💪 Confidence Boosters</div>
+            <ul class="booster-list" id="booster-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ABOUT PAGE ── -->
+      <div class="page" id="page-about">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">ℹ️ About This Project</h2>
+        <div class="card">
+          <div class="card-title">🏗️ Architecture</div>
+          <div style="font-size:14px;line-height:1.8;color:var(--muted);">
+            <p><strong style="color:var(--text);">Problem Statement:</strong> Interview Trainer Agent powered by RAG — prepares users for job interviews by generating tailored question sets and preparation strategies.</p>
+            <br>
+            <p><strong style="color:var(--text);">Tech Stack:</strong></p>
+            <ul style="padding-left:20px;margin-top:8px;">
+              <li>🧠 <strong style="color:var(--text);">IBM Granite 3.3 8B Instruct</strong> — Core LLM for question generation, evaluation, and strategy via IBM watsonx.ai</li>
+              <li>📊 <strong style="color:var(--text);">IBM Slate 125M</strong> — Embedding model for semantic document retrieval</li>
+              <li>🔍 <strong style="color:var(--text);">FAISS Vector Store</strong> — Efficient similarity search over the knowledge base</li>
+              <li>🐍 <strong style="color:var(--text);">Python + Flask</strong> — Backend API server</li>
+              <li>📚 <strong style="color:var(--text);">RAG Pipeline</strong> — Retrieves role-specific knowledge before generating answers</li>
+              <li>🌐 <strong style="color:var(--text);">Vanilla HTML/CSS/JS</strong> — Responsive single-page frontend</li>
+            </ul>
+            <br>
+            <p><strong style="color:var(--text);">Knowledge Base:</strong> Curated interview questions for Software Engineers, Data Scientists, Product Managers, behavioral questions, HR questions, and industry insights — all embedded and indexed for semantic retrieval.</p>
+            <br>
+            <p><strong style="color:var(--text);">RAG Flow:</strong> User profile → semantic query → FAISS retrieval → relevant docs injected into Granite prompt → personalized response generated → returned to user.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔑 Setup Instructions</div>
+          <div style="font-size:14px;line-height:1.9;color:var(--muted);">
+            <ol style="padding-left:20px;">
+              <li>Get IBM Cloud API key at <strong style="color:var(--text);">cloud.ibm.com</strong></li>
+              <li>Create a watsonx.ai project at <strong style="color:var(--text);">dataplatform.cloud.ibm.com</strong></li>
+              <li>Add your <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">WATSONX_API_KEY</code> and <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">WATSONX_PROJECT_ID</code> to the <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">.env</code> file</li>
+              <li>Run: <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">pip install -r requirements.txt</code></li>
+              <li>Run: <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">python app.py</code></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RESUME ANALYZER PAGE ── -->
+      <div class="page" id="page-resume">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">📄 Resume Analyzer</h2>
+        <p style="color:var(--muted);margin-bottom:24px;">Upload your PDF resume or paste text to identify skills, strengths, and gaps — powered by IBM Granite + RAG.</p>
+
+        <div class="card">
+          <div class="card-title">📤 Upload or Paste Resume</div>
+          <div class="form-group">
+            <label>Target Job Title</label>
+            <input type="text" id="ra-job-title" placeholder="e.g. Software Engineer" list="roles-list" />
+          </div>
+          <div class="form-group">
+            <label>Upload PDF Resume</label>
+            <input type="file" id="ra-pdf-file" accept=".pdf" style="padding:8px;cursor:pointer;" />
+          </div>
+          <p style="color:var(--muted);font-size:13px;text-align:center;margin:4px 0;">— or —</p>
+          <div class="form-group">
+            <label>Paste Resume Text</label>
+            <textarea id="ra-text" placeholder="Paste your resume text here..." style="min-height:130px;"></textarea>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <button class="btn btn-primary" onclick="analyzeResume()" id="ra-btn">🔍 Analyze Resume</button>
+            <span id="ra-loading" style="display:none;color:var(--muted);font-size:13px;"><span class="spinner"></span> IBM Granite is analysing...</span>
+          </div>
+        </div>
+
+        <div id="ra-results" style="display:none;">
+          <div class="card">
+            <div class="card-title">🧠 Overall Assessment</div>
+            <div class="answer-text" id="ra-assessment"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">✅ Extracted Skills</div>
+            <div id="ra-skills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">💪 Strengths</div>
+            <ul id="ra-strengths" style="list-style:none;"></ul>
+          </div>
+          <div class="card">
+            <div class="card-title">⚠️ Missing Skills for Role</div>
+            <ul id="ra-missing" style="list-style:none;"></ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🚀 Next Step</div>
+            <p style="font-size:14px;color:var(--muted);">Use these insights to generate targeted questions:</p>
+            <button class="btn btn-primary" style="margin-top:10px;" onclick="generateFromResume()">⚡ Generate Tailored Questions</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HISTORY PAGE ── -->
+      <div class="page" id="page-history">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;">📈 Interview History</h2>
+        <p style="color:var(--muted);margin-bottom:20px;">Track your progress across practice sessions.</p>
+
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="loadHistory()">🔄 Refresh History</button>
+          <button class="btn btn-secondary" onclick="saveCurrentSession()" id="save-session-btn">💾 Save Current Session</button>
+        </div>
+
+        <!-- Score Trend Chart -->
+        <div class="card" id="trend-card" style="display:none;">
+          <div class="card-title">📊 Score Trend</div>
+          <div id="trend-chart" style="height:120px;position:relative;overflow:hidden;"></div>
+        </div>
+
+        <div id="history-list">
+          <div style="color:var(--muted);text-align:center;padding:40px;">
+            No history yet. Complete a practice session and save it here.
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+  // ─── State ───
+  const state = {
+    profile: null,
+    questions: [],
+    sessionActive: false,
+  };
+
+  // ─── Tags Input ───
+  const skillTags = [];
+  const skillInput = document.getElementById('skill-input');
+  const skillsContainer = document.getElementById('skills-container');
+
+  function addSkill(value) {
+    const v = value.trim().replace(/,$/, '');
+    if (!v || skillTags.includes(v)) return;
+    skillTags.push(v);
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.innerHTML = `${v} <button class="tag-remove" onclick="removeSkill('${v}', this)">×</button>`;
+    skillsContainer.insertBefore(tag, skillInput);
+    skillInput.value = '';
+  }
+
+  function removeSkill(val, btn) {
+    const i = skillTags.indexOf(val);
+    if (i > -1) skillTags.splice(i, 1);
+    btn.parentElement.remove();
+  }
+
+  skillInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addSkill(skillInput.value);
+    } else if (e.key === 'Backspace' && !skillInput.value && skillTags.length) {
+      const last = skillTags[skillTags.length - 1];
+      const tags = skillsContainer.querySelectorAll('.tag');
+      tags[tags.length - 1].remove();
+      skillTags.pop();
+    }
+  });
+
+  // ─── Navigation ───
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + pageId)?.classList.add('active');
+    document.getElementById('nav-' + pageId)?.classList.add('active');
+  }
+
+  // ─── Toast ───
+  function toast(message, type = 'info') {
+    const container = document.getElementById('toasts');
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.textContent = message;
+    container.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+  }
+
+  // ─── Health Check ───
+  async function checkHealth() {
+    try {
+      const res = await fetch('/api/health');
+      const data = await res.json();
+      const dot = document.getElementById('statusDot');
+      const txt = document.getElementById('statusText');
+      if (data.watsonx_configured) {
+        dot.style.background = 'var(--success)';
+        txt.textContent = 'IBM Granite Connected';
+      } else {
+        dot.style.background = 'var(--warning)';
+        txt.textContent = 'Demo Mode (set .env credentials)';
+      }
+    } catch {
+      document.getElementById('statusDot').style.background = 'var(--danger)';
+      document.getElementById('statusText').textContent = 'Server offline';
+    }
+  }
+
+  // ─── Profile ───
+  function getProfileData() {
+    const focusAreas = [];
+    if (document.getElementById('focus-technical').checked) focusAreas.push('technical');
+    if (document.getElementById('focus-behavioral').checked) focusAreas.push('behavioral');
+    if (document.getElementById('focus-hr').checked) focusAreas.push('hr');
+
+    return {
+      name: document.getElementById('inp-name').value.trim(),
+      job_title: document.getElementById('inp-jobtitle').value.trim(),
+      experience_level: document.getElementById('inp-level').value,
+      skills: [...skillTags],
+      resume_text: document.getElementById('inp-resume').value.trim(),
+      target_company: document.getElementById('inp-company').value.trim(),
+      focus_areas: focusAreas,
+    };
+  }
+
+  function validateProfile() {
+    const p = getProfileData();
+    if (!p.name) { toast('Please enter your name', 'error'); return null; }
+    if (!p.job_title) { toast('Please enter your target job title', 'error'); return null; }
+    if (!p.experience_level) { toast('Please select your experience level', 'error'); return null; }
+    return p;
+  }
+
+  async function saveProfile() {
+    const profile = validateProfile();
+    if (!profile) return;
+
+    try {
+      const res = await fetch('/api/session/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profile),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      state.profile = profile;
+      state.sessionActive = true;
+      document.getElementById('profile-saved-msg').style.display = 'flex';
+      toast(`Profile saved for ${profile.name}! ✅`, 'success');
+      populatePracticeDropdown([]);
+    } catch (e) {
+      toast('Failed to save profile: ' + e.message, 'error');
+    }
+  }
+
+  // ─── Question Generation ───
+  async function generateQuestions() {
+    const profile = validateProfile();
+    if (!profile) { showPage('profile'); return; }
+
+    const numQ = parseInt(document.getElementById('q-num').value);
+    const filter = document.getElementById('q-filter').value;
+    const categories = filter ? [filter] : ['technical', 'behavioral', 'hr'];
+    const difficulty = document.getElementById('q-difficulty')?.value || '';
+
+    document.getElementById('q-list').innerHTML = '';
+    document.getElementById('q-stats').style.display = 'none';
+    const loading = document.getElementById('q-loading');
+    loading.style.display = 'flex';
+    document.getElementById('gen-btn').disabled = true;
+
+    try {
+      const body = { profile, num_questions: numQ, categories };
+      if (difficulty) body.difficulty = difficulty;
+      const res = await fetch('/api/questions/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      state.questions = data.questions;
+      renderQuestions(data.questions);
+      populatePracticeDropdown(data.questions);
+      toast(`${data.questions.length} questions generated! 🎯`, 'success');
+    } catch (e) {
+      toast('Error: ' + e.message, 'error');
+      document.getElementById('q-list').innerHTML = `<div class="card" style="color:var(--danger);">⚠️ ${e.message}</div>`;
+    } finally {
+      loading.style.display = 'none';
+      document.getElementById('gen-btn').disabled = false;
+    }
+  }
+
+  function renderQuestions(questions) {
+    const list = document.getElementById('q-list');
+    list.innerHTML = '';
+
+    let tech = 0, beh = 0, hr = 0;
+    questions.forEach((q, i) => {
+      const cat = (q.category || 'other').toLowerCase();
+      if (cat === 'technical') tech++;
+      else if (cat === 'behavioral') beh++;
+      else if (cat === 'hr') hr++;
+
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.innerHTML = `
+        <div class="question-header" onclick="toggleQuestion(this.parentElement)">
+          <div class="q-number">${i + 1}</div>
+          <div style="flex:1;">
+            <div class="q-text">${escHtml(q.question)}</div>
+            <div class="q-meta">
+              <span class="badge badge-${cat}">${cat}</span>
+              <span class="badge badge-${q.difficulty || 'medium'}">${q.difficulty || 'medium'}</span>
+              ${(q.keywords || []).slice(0,2).map(k => `<span class="keyword">${escHtml(k)}</span>`).join('')}
+            </div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="question-body">
+          <div class="answer-section">
+            <div class="answer-label">Model Answer</div>
+            <div class="answer-text">${escHtml(q.model_answer)}</div>
+          </div>
+          ${q.improvement_tips ? `
+          <div class="answer-section" style="margin-top:12px;">
+            <div class="answer-label">💡 Tips</div>
+            <div class="tips-text">${escHtml(q.improvement_tips)}</div>
+          </div>` : ''}
+          ${q.keywords?.length ? `
+          <div class="keywords">
+            ${q.keywords.map(k => `<span class="keyword">${escHtml(k)}</span>`).join('')}
+          </div>` : ''}
+          <div class="practice-area" style="margin-top:16px;">
+            <button class="btn btn-secondary btn-sm" onclick="practiceThis('${escAttr(q.question)}')">🎤 Practice This</button>
+          </div>
+        </div>`;
+      list.appendChild(card);
+    });
+
+    document.getElementById('q-stats').style.display = 'flex';
+    document.getElementById('stat-total').textContent = questions.length;
+    document.getElementById('stat-tech').textContent = tech;
+    document.getElementById('stat-beh').textContent = beh;
+    document.getElementById('stat-hr').textContent = hr;
+  }
+
+  function toggleQuestion(card) {
+    card.classList.toggle('expanded');
+  }
+
+  function practiceThis(question) {
+    document.getElementById('practice-q-custom').value = question;
+    showPage('practice');
+    toast('Question loaded in Practice Mode', 'info');
+  }
+
+  // ─── Practice / Evaluation ───
+  function populatePracticeDropdown(questions) {
+    const sel = document.getElementById('practice-q-select');
+    while (sel.options.length > 1) sel.remove(1);
+    questions.forEach((q, i) => {
+      const opt = document.createElement('option');
+      opt.value = q.question;
+      opt.textContent = `${i + 1}. ${q.question.substring(0, 70)}...`;
+      sel.appendChild(opt);
+    });
+  }
+
+  function loadPracticeQuestion() {
+    const val = document.getElementById('practice-q-select').value;
+    if (val) document.getElementById('practice-q-custom').value = val;
+  }
+
+  async function evaluateAnswer() {
+    const question = document.getElementById('practice-q-custom').value.trim() ||
+                     document.getElementById('practice-q-select').value;
+    const answer = document.getElementById('practice-answer').value.trim();
+
+    if (!question) { toast('Please select or type a question', 'error'); return; }
+    if (!answer || answer.length < 20) { toast('Please write a longer answer (min 20 chars)', 'error'); return; }
+
+    document.getElementById('eval-btn').disabled = true;
+    document.getElementById('eval-loading').style.display = 'inline-flex';
+    document.getElementById('eval-results').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          answer,
+          profile: state.profile,
+        }),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      renderEvaluation(data);
+    } catch (e) {
+      toast('Evaluation failed: ' + e.message, 'error');
+    } finally {
+      document.getElementById('eval-btn').disabled = false;
+      document.getElementById('eval-loading').style.display = 'none';
+    }
+  }
+
+  function renderEvaluation(data) {
+    const score = data.score || 5;
+    const circle = document.getElementById('score-circle');
+    circle.textContent = score;
+    circle.className = 'score-circle ' + (score >= 7 ? 'score-good' : score >= 4 ? 'score-ok' : 'score-low');
+
+    const labels = ['', 'Very Weak', 'Weak', 'Below Average', 'Adequate', 'Adequate', 'Good', 'Good', 'Excellent', 'Excellent', 'Outstanding'];
+    document.getElementById('score-label').textContent = `${score}/10 — ${labels[score]}`;
+    document.getElementById('score-feedback').textContent = data.overall_feedback || '';
+    document.getElementById('score-bar').style.width = (score * 10) + '%';
+
+    const strengths = document.getElementById('eval-strengths');
+    strengths.innerHTML = (data.strengths || []).map(s =>
+      `<li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:8px;"><span style="color:var(--success);">✓</span>${escHtml(s)}</li>`
+    ).join('');
+
+    const improvements = document.getElementById('eval-improvements');
+    improvements.innerHTML = (data.improvements || []).map(s =>
+      `<li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:8px;"><span style="color:var(--warning);">→</span>${escHtml(s)}</li>`
+    ).join('');
+
+    document.getElementById('eval-revised').textContent = data.revised_answer || '';
+    document.getElementById('eval-results').style.display = 'block';
+    document.getElementById('eval-results').scrollIntoView({ behavior: 'smooth' });
+
+    // Store evaluation in state for history/PDF
+    if (!state.evaluations) state.evaluations = [];
+    const qText = document.getElementById('practice-q-custom').value.trim() ||
+                  document.getElementById('practice-q-select').value || '';
+    const aText = document.getElementById('practice-answer').value.trim();
+    // avoid duplicates for same question
+    state.evaluations = state.evaluations.filter(e => e.question !== qText);
+    state.evaluations.push({
+      question: qText,
+      answer: aText,
+      score: data.score,
+      strengths: data.strengths || [],
+      improvements: data.improvements || [],
+      overall_feedback: data.overall_feedback || '',
+    });
+
+    // Show PDF download card once at least one evaluation is done
+    document.getElementById('pdf-report-card').style.display = 'block';
+  }
+
+  // ─── Strategy ───
+  async function generateStrategy() {
+    const profile = validateProfile();
+    if (!profile) { showPage('profile'); return; }
+
+    document.getElementById('strat-content').style.display = 'none';
+    const loading = document.getElementById('strat-loading');
+    loading.style.display = 'flex';
+    document.getElementById('strat-btn').disabled = true;
+
+    try {
+      const res = await fetch('/api/strategy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile }),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      document.getElementById('strategy-text').innerHTML = renderMarkdown(data.strategy);
+      const boosterList = document.getElementById('booster-list');
+      boosterList.innerHTML = (data.confidence_boosters || []).map(b =>
+        `<li class="booster-item"><span class="booster-icon">✦</span>${escHtml(b)}</li>`
+      ).join('');
+      document.getElementById('strat-content').style.display = 'block';
+      toast('Strategy generated! 🗺️', 'success');
+    } catch (e) {
+      toast('Strategy generation failed: ' + e.message, 'error');
+    } finally {
+      loading.style.display = 'none';
+      document.getElementById('strat-btn').disabled = false;
+    }
+  }
+
+  // ─── Full Session ───
+  async function generateFullSession() {
+    const profile = validateProfile();
+    if (!profile) return;
+
+    state.profile = profile;
+    showPage('questions');
+    document.getElementById('q-list').innerHTML = '';
+    document.getElementById('q-stats').style.display = 'none';
+    const loading = document.getElementById('q-loading');
+    loading.style.display = 'flex';
+
+    try {
+      const res = await fetch('/api/session/full', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile, num_questions: 10 }),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      state.questions = data.questions;
+      renderQuestions(data.questions);
+      populatePracticeDropdown(data.questions);
+
+      if (data.preparation_strategy) {
+        document.getElementById('strategy-text').innerHTML = renderMarkdown(data.preparation_strategy);
+        document.getElementById('booster-list').innerHTML = (data.confidence_boosters || []).map(b =>
+          `<li class="booster-item"><span class="booster-icon">✦</span>${escHtml(b)}</li>`
+        ).join('');
+        document.getElementById('strat-content').style.display = 'block';
+      }
+      toast(`Full session ready! ${data.questions.length} questions + strategy generated 🎯`, 'success');
+    } catch (e) {
+      toast('Session failed: ' + e.message, 'error');
+    } finally {
+      loading.style.display = 'none';
+    }
+  }
+
+  // ─── Quick Generate ───
+  function quickGenerate() {
+    if (!document.getElementById('inp-name').value) {
+      showPage('profile');
+      toast('Please fill in your profile first', 'info');
+      return;
+    }
+    showPage('questions');
+    generateQuestions();
+  }
+
+  // ─── Utilities ───
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(str) {
+    return String(str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  /**
+   * renderMarkdown — lightweight Markdown → HTML converter.
+   * Handles: headings (#/##/###), bold (**text**), italic (*text*),
+   * unordered lists (- item), ordered lists (1. item), inline code (`code`),
+   * horizontal rules (---), and paragraph breaks.
+   * Does NOT eval scripts — safe to assign to innerHTML.
+   */
+  function renderMarkdown(md) {
+    if (!md) return '';
+    let html = escHtml(md);  // escape raw HTML first for safety
+
+    // Headings  ### ## #
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+    // Bold **text** or __text__
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+    // Italic *text* or _text_  (single, not double)
+    html = html.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+    html = html.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
+
+    // Inline code `code`
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    // Horizontal rule ---
+    html = html.replace(/^-{3,}$/gm, '<hr style="border-color:var(--border);margin:12px 0;">');
+
+    // Unordered list items (- item or * item at start of line)
+    html = html.replace(/^[ \t]*[-*] (.+)$/gm, '<li>$1</li>');
+
+    // Ordered list items (1. item)
+    html = html.replace(/^[ \t]*\d+\. (.+)$/gm, '<li>$1</li>');
+
+    // Wrap consecutive <li> runs in <ul>
+    html = html.replace(/(<li>.*?<\/li>(\n|$))+/gs, (match) => `<ul>${match}</ul>`);
+
+    // Paragraph breaks — two or more newlines become <p> separators
+    // First convert remaining line content to paragraphs
+    const lines = html.split('\n');
+    const result = [];
+    let inBlock = false;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        if (inBlock) { result.push('</p>'); inBlock = false; }
+      } else if (
+        trimmed.startsWith('<h') || trimmed.startsWith('<ul') ||
+        trimmed.startsWith('<li') || trimmed.startsWith('<hr')
+      ) {
+        if (inBlock) { result.push('</p>'); inBlock = false; }
+        result.push(trimmed);
+      } else {
+        if (!inBlock) { result.push('<p>'); inBlock = true; }
+        result.push(trimmed);
+      }
+    }
+    if (inBlock) result.push('</p>');
+
+    return result.join('\n');
+  }
+
+  // ─── Feature 1: Resume Analyzer ───
+
+  // Stores last analysis result for the "generate from resume" button
+  let _lastResumeAnalysis = null;
+
+  async function analyzeResume() {
+    const jobTitle = document.getElementById('ra-job-title').value.trim();
+    if (!jobTitle) { toast('Please enter a target job title', 'error'); return; }
+
+    const fileInput = document.getElementById('ra-pdf-file');
+    const textInput = document.getElementById('ra-text').value.trim();
+
+    if (!fileInput.files.length && !textInput) {
+      toast('Upload a PDF or paste resume text', 'error'); return;
+    }
+
+    document.getElementById('ra-btn').disabled = true;
+    document.getElementById('ra-loading').style.display = 'inline-flex';
+    document.getElementById('ra-results').style.display = 'none';
+
+    try {
+      let res;
+      if (fileInput.files.length) {
+        const fd = new FormData();
+        fd.append('file', fileInput.files[0]);
+        fd.append('job_title', jobTitle);
+        res = await fetch('/api/resume/analyze', { method: 'POST', body: fd, credentials: 'include' });
+      } else {
+        res = await fetch('/api/resume/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: textInput, job_title: jobTitle }),
+          credentials: 'include',
+        });
+      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      _lastResumeAnalysis = { ...data, job_title: jobTitle };
+      renderResumeAnalysis(data);
+      toast('Resume analysed! ✅', 'success');
+    } catch (e) {
+      toast('Analysis failed: ' + e.message, 'error');
+    } finally {
+      document.getElementById('ra-btn').disabled = false;
+      document.getElementById('ra-loading').style.display = 'none';
+    }
+  }
+
+  function renderResumeAnalysis(data) {
+    document.getElementById('ra-assessment').textContent = data.overall_assessment || '';
+    document.getElementById('ra-skills').innerHTML =
+      (data.extracted_skills || []).map(s =>
+        `<span class="tag" style="background:rgba(139,92,246,0.2);color:#a78bfa;">${escHtml(s)}</span>`
+      ).join('');
+    document.getElementById('ra-strengths').innerHTML =
+      (data.strengths || []).map(s =>
+        `<li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:8px;"><span style="color:var(--success);">✓</span>${escHtml(s)}</li>`
+      ).join('');
+    document.getElementById('ra-missing').innerHTML =
+      (data.missing_skills || []).map(s =>
+        `<li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:8px;"><span style="color:var(--warning);">⚠</span>${escHtml(s)}</li>`
+      ).join('');
+    document.getElementById('ra-results').style.display = 'block';
+  }
+
+  function generateFromResume() {
+    if (!_lastResumeAnalysis) return;
+    // Pre-fill profile fields from analysis
+    const jt = document.getElementById('inp-jobtitle');
+    if (!jt.value) jt.value = _lastResumeAnalysis.job_title || '';
+    // Auto-add extracted skills as tags
+    (_lastResumeAnalysis.extracted_skills || []).forEach(s => {
+      if (!skillTags.includes(s)) addSkill(s);
+    });
+    // Populate resume text field
+    if (_lastResumeAnalysis.resume_text) {
+      document.getElementById('inp-resume').value = _lastResumeAnalysis.resume_text.substring(0, 1500);
+    }
+    showPage('questions');
+    toast('Profile updated from resume — fill in name/level and generate!', 'info');
+  }
+
+  // ─── Feature 3: History & Progress ───
+
+  async function loadHistory() {
+    try {
+      const res = await fetch('/api/history', { credentials: 'include' });
+      const data = await res.json();
+      renderHistory(data.sessions || []);
+      if ((data.sessions || []).length > 0) {
+        await loadTrend();
+      }
+    } catch (e) {
+      toast('Could not load history: ' + e.message, 'error');
+    }
+  }
+
+  function renderHistory(sessions) {
+    const list = document.getElementById('history-list');
+    if (!sessions.length) {
+      list.innerHTML = '<div style="color:var(--muted);text-align:center;padding:40px;">No history yet. Complete a practice session and save it.</div>';
+      return;
+    }
+    list.innerHTML = sessions.map(s => {
+      const evals = s.evaluations || [];
+      const scores = evals.map(e => e.score).filter(Boolean);
+      const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+      const date = (s.timestamp || '').substring(0, 10);
+      return `<div class="card" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-weight:700;font-size:15px;">${escHtml(s.candidate_name || 'Unknown')} — ${escHtml(s.job_title || '')}</div>
+            <div style="font-size:13px;color:var(--muted);">${escHtml(s.experience_level || '')} · ${date} · ${(s.questions||[]).length} questions · ${evals.length} evaluated</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            ${scores.length ? `<span style="font-size:20px;font-weight:800;color:${avg>=7?'var(--success)':avg>=4?'var(--warning)':'var(--danger)'};">Avg: ${avg}/10</span>` : ''}
+            <button class="btn btn-secondary btn-sm" onclick="deleteSession('${s.session_id}')">🗑</button>
+          </div>
+        </div>
+        ${evals.length ? `
+        <div style="margin-top:10px;">
+          ${evals.map((e,i) => `<div style="font-size:13px;padding:4px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;">
+            <span style="flex:1;padding-right:8px;">${escHtml((e.question||'').substring(0,70))}${(e.question||'').length>70?'…':''}</span>
+            <span style="font-weight:700;color:${(e.score||0)>=7?'var(--success)':(e.score||0)>=4?'var(--warning)':'var(--danger)'};">${e.score||'—'}/10</span>
+          </div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  async function loadTrend() {
+    try {
+      const res = await fetch('/api/history/trend', { credentials: 'include' });
+      const data = await res.json();
+      renderTrendChart(data.trend || []);
+    } catch(e) { /* silent */ }
+  }
+
+  function renderTrendChart(trend) {
+    if (!trend.length) return;
+    const card = document.getElementById('trend-card');
+    card.style.display = 'block';
+    const container = document.getElementById('trend-chart');
+    const max = 10;
+    const w = 100 / trend.length;
+    container.innerHTML = `
+      <div style="display:flex;align-items:flex-end;height:100px;gap:4px;padding:0 4px;">
+        ${trend.map((t, i) => {
+          const h = Math.round((t.avg_score / max) * 90);
+          const color = t.avg_score >= 7 ? 'var(--success)' : t.avg_score >= 4 ? 'var(--warning)' : 'var(--danger)';
+          return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;" title="${t.date}: ${t.avg_score}/10">
+            <div style="font-size:10px;color:var(--muted);">${t.avg_score}</div>
+            <div style="width:100%;background:${color};height:${h}px;border-radius:3px 3px 0 0;"></div>
+            <div style="font-size:9px;color:var(--muted);transform:rotate(-40deg);white-space:nowrap;">${t.date}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  async function saveCurrentSession() {
+    const profile = state.profile || getProfileData();
+    if (!profile || !profile.name) {
+      toast('Please fill in your profile first', 'error'); return;
+    }
+    if (!state.questions || !state.questions.length) {
+      toast('Generate some questions first, then save', 'info'); return;
+    }
+    try {
+      const payload = {
+        candidate_name: profile.name,
+        job_title: profile.job_title,
+        experience_level: profile.experience_level,
+        questions: state.questions,
+        evaluations: state.evaluations || [],
+      };
+      const res = await fetch('/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      toast(`Session saved! ID: ${data.session_id} ✅`, 'success');
+    } catch (e) {
+      toast('Save failed: ' + e.message, 'error');
+    }
+  }
+
+  async function deleteSession(sessionId) {
+    if (!confirm('Delete this session?')) return;
+    try {
+      const res = await fetch(`/api/history/${sessionId}`, {
+        method: 'DELETE', credentials: 'include'
+      });
+      if (res.ok) { toast('Session deleted', 'info'); loadHistory(); }
+      else toast('Delete failed', 'error');
+    } catch(e) { toast('Delete failed: ' + e.message, 'error'); }
+  }
+
+  // ─── Feature 4: PDF Report ───
+
+  async function downloadPdfReport() {
+    const profile = state.profile || getProfileData();
+    if (!profile || !profile.name) {
+      toast('Please fill in your profile first', 'error'); return;
+    }
+
+    document.getElementById('pdf-btn').disabled = true;
+    document.getElementById('pdf-loading').style.display = 'inline-flex';
+
+    try {
+      // Fetch strategy text if available
+      const stratEl = document.getElementById('strategy-text');
+      const stratText = stratEl ? stratEl.innerText : '';
+
+      const payload = {
+        candidate_name: profile.name,
+        job_title: profile.job_title || '',
+        experience_level: profile.experience_level || '',
+        questions: state.questions || [],
+        evaluations: state.evaluations || [],
+        preparation_strategy: stratText,
+      };
+
+      const res = await fetch('/api/report/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'PDF generation failed');
+      }
+
+      // Trigger browser download
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const safeName = (profile.name || 'report').replace(/\s+/g, '_');
+      a.download = `Interview_Report_${safeName}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('PDF downloaded! 📄', 'success');
+    } catch (e) {
+      toast('PDF error: ' + e.message, 'error');
+    } finally {
+      document.getElementById('pdf-btn').disabled = false;
+      document.getElementById('pdf-loading').style.display = 'none';
+    }
+  }
+
+  // ─── Init ───
+  checkHealth();
+  setInterval(checkHealth, 30000);
+  state.evaluations = [];
+</script>
+</body>
+</html>
